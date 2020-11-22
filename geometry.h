@@ -36,6 +36,8 @@ public:
 
     Vector &operator=(Vector &&vec) = default;
 
+    explicit operator Position() const;
+
     Vector operator+(const Vector &vec) const {
         return Vector{m_x + vec.x(), m_y + vec.y()};
     }
@@ -90,6 +92,10 @@ public:
     Position(Position &&pos) = default;
 
     Position &operator=(Position &&pos) = default;
+
+    explicit operator Vector() const {
+        return Vector{m_x, m_y};
+    }
 
     Position operator+(const Vector &vec) const {
         return Position{m_x + vec.x(), m_y + vec.y()};

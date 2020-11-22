@@ -3,6 +3,10 @@
 
 Vector::Vector(const Position &pos) : m_x(pos.x()), m_y(pos.y()) {}
 
+Vector::operator Position() const {
+    return Position{m_x, m_y};
+}
+
 Position Vector::operator+(const Position &pos) const {
     return pos + *this;
 }
