@@ -28,6 +28,8 @@ public:
 
     Vector(const Vector &vec) = default;
 
+    explicit Vector(const Position &pos);
+
     Vector &operator=(const Vector &vec) = default;
 
     Vector(Vector &&vec) = default;
@@ -80,6 +82,8 @@ public:
     ~Position() = default;
 
     Position(const Position &pos) = default;
+
+    explicit Position(const Vector &vec) : m_x(vec.x()), m_y(vec.y()) {}
 
     Position &operator=(const Position &pos) = default;
 
@@ -187,12 +191,17 @@ private:
 public:
     Rectangles() = default;
 
-    Rectangles(std::initializer_list<Rectangle> rectangles) : rectangles(
-            rectangles) {}
+    Rectangles(std::initializer_list<Rectangle> rectangles) : rectangles(rectangles) {}
 
     ~Rectangles() = default;
 
+    Rectangles(const Rectangles &rects) = default;
+
     Rectangles &operator=(const Rectangles &rects) = default;
+
+    Rectangles(Rectangles &&rects) = default;
+
+    Rectangles &operator=(Rectangles &&rects) = default;
 
     Rectangles operator+(const Vector &vec) const {
         Rectangles rects;

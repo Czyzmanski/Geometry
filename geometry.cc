@@ -1,6 +1,8 @@
 #include <cstdlib>
 #include "geometry.h"
 
+Vector::Vector(const Position &pos) : m_x(pos.x()), m_y(pos.y()) {}
+
 Position Vector::operator+(const Position &pos) const {
     return pos + *this;
 }
