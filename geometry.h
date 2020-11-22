@@ -187,7 +187,8 @@ private:
 public:
     Rectangles() = default;
 
-    Rectangles(std::initializer_list<Rectangle> rectangles) : rectangles(rectangles) {}
+    Rectangles(std::initializer_list<Rectangle> rectangles) : rectangles(
+            rectangles) {}
 
     ~Rectangles() = default;
 
@@ -224,5 +225,15 @@ public:
     }
 };
 
+
+inline Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2) {
+    return Rectangle{rect1.width(), rect1.height() + rect2.height(), rect1.pos()};
+}
+
+inline Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2) {
+    return Rectangle{rect1.width() + rect2.width(), rect1.height(), rect1.pos()};
+}
+
+Rectangle merge_all(const Rectangles &rects);
 
 #endif // GEOMETRY_H
