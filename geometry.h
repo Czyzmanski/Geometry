@@ -6,6 +6,15 @@
 #include <utility>
 
 
+class Position;
+
+
+class Rectangle;
+
+
+class Rectangles;
+
+
 class Vector {
 private:
     int32_t m_x;
@@ -24,6 +33,16 @@ public:
     Vector(Vector &&vec) = default;
 
     Vector &operator=(Vector &&vec) = default;
+
+    Vector operator+(const Vector &vec) const {
+        return Vector{m_x + vec.x(), m_y + vec.y()};
+    }
+
+    Position operator+(const Position &pos) const;
+
+    Rectangle operator+(const Rectangle &rect) const;
+
+    Rectangles operator+(const Rectangles &rects) const;
 
     bool operator==(const Vector &vec) const {
         return m_x == vec.m_x && m_y == vec.m_y;
@@ -67,6 +86,10 @@ public:
     Position(Position &&pos) = default;
 
     Position &operator=(Position &&pos) = default;
+
+    Position operator+(const Vector &vec) const {
+        return Position{m_x + vec.x(), m_y + vec.y()};
+    }
 
     bool operator==(const Position &pos) const {
         return m_x == pos.m_x && m_y == pos.m_y;
@@ -121,6 +144,10 @@ public:
 
     Rectangle &operator=(Rectangle &&rect) = default;
 
+    Rectangle operator+(const Vector &vec) const {
+        return Rectangle{m_width, m_height, m_pos + vec};
+    }
+
     bool operator==(const Rectangle &rect) const {
         return m_width == rect.m_width
                && m_height == rect.m_height
@@ -164,6 +191,19 @@ public:
 
     ~Rectangles() = default;
 
+    Rectangles &operator=(const Rectangles &rects) = default;
+
+    Rectangles operator+(const Vector &vec) const {
+        Rectangles rects;
+        rects.rectangles.reserve(rectangles.size());
+
+        for (const Rectangle &rect : rectangles) {
+            rects.rectangles.push_back(rect + vec);
+        }
+
+        return rects;
+    }
+
     const Rectangle &operator[](std::size_t i) const {
         return rectangles[i];
     }
@@ -183,5 +223,6 @@ public:
         return *this;
     }
 };
+
 
 #endif // GEOMETRY_H
