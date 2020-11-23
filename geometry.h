@@ -1,6 +1,7 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
 
+#include <cstdlib>
 #include <cstdint>
 #include <vector>
 #include <utility>
@@ -125,7 +126,7 @@ public:
         return *this;
     }
 
-    static Position &origin() {
+    static const Position &origin() {
         static Position position{0, 0};
 
         return position;
@@ -188,7 +189,7 @@ public:
     }
 
     Rectangle &operator+=(const Vector &vec) {
-        m_pos += vec;
+        m_pos = m_pos + vec;
 
         return *this;
     }
