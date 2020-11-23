@@ -5,15 +5,13 @@
 #include <cstdint>
 #include <vector>
 #include <utility>
+#include <cassert>
 
 
 class Position;
 
 
 class Rectangle;
-
-
-class Rectangles;
 
 
 class Vector {
@@ -33,9 +31,9 @@ public:
 
     Vector &operator=(const Vector &vec) = default;
 
-    Vector(Vector &&vec) = default;
+    Vector(Vector &&vec) noexcept = default;
 
-    Vector &operator=(Vector &&vec) = default;
+    Vector &operator=(Vector &&vec) noexcept = default;
 
     explicit operator Position() const;
 
@@ -46,10 +44,6 @@ public:
     Position operator+(const Position &pos) const;
 
     Rectangle operator+(const Rectangle &rect) const;
-
-    Rectangles operator+(const Rectangles &rects) const;
-
-    Rectangles operator+(Rectangles &&rects) const;
 
     bool operator==(const Vector &vec) const {
         return m_x == vec.m_x && m_y == vec.m_y;
@@ -92,9 +86,9 @@ public:
 
     Position &operator=(const Position &pos) = default;
 
-    Position(Position &&pos) = default;
+    Position(Position &&pos) noexcept = default;
 
-    Position &operator=(Position &&pos) = default;
+    Position &operator=(Position &&pos) noexcept = default;
 
     explicit operator Vector() const {
         return vec;
@@ -158,9 +152,9 @@ public:
 
     Rectangle &operator=(const Rectangle &rect) = default;
 
-    Rectangle(Rectangle &&rect) = default;
+    Rectangle(Rectangle &&rect) noexcept = default;
 
-    Rectangle &operator=(Rectangle &&rect) = default;
+    Rectangle &operator=(Rectangle &&rect) noexcept = default;
 
     Rectangle operator+(const Vector &vec) const {
         return Rectangle{m_width, m_height, m_pos + vec};
@@ -214,16 +208,9 @@ public:
 
     Rectangles &operator=(const Rectangles &rects) = default;
 
-    Rectangles(Rectangles &&rects) = default;
+    Rectangles(Rectangles &&rects) noexcept = default;
 
-    Rectangles &operator=(Rectangles &&rects) = default;
-
-    Rectangles operator+(const Vector &vec) const {
-        Rectangles result{*this};
-        result += vec;
-
-        return result;
-    }
+    Rectangles &operator=(Rectangles &&rects) noexcept = default;
 
     Rectangle &operator[](size_t i) {
         return rectangles[i];
@@ -250,6 +237,13 @@ public:
     }
 };
 
+inline Rectangles operator+(Rectangles rects, const Vector &vec) {
+    return std::move(rects += vec);
+}
+
+inline Rectangles operator+(const Vector &vec, Rectangles rects) {
+    return std::move(rects) + vec;
+}
 
 Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2);
 

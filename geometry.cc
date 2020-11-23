@@ -16,17 +16,6 @@ Rectangle Vector::operator+(const Rectangle &rect) const {
     return rect + *this;
 }
 
-Rectangles Vector::operator+(const Rectangles &rects) const {
-    return rects + *this;
-}
-
-Rectangles Vector::operator+(Rectangles &&rects) const {
-    Rectangles result{rects};
-    result += *this;
-
-    return result;
-}
-
 namespace {
     inline bool horizontal_merge(const Rectangle &rect1, const Rectangle &rect2) {
         return rect1.width() == rect2.width()
@@ -41,7 +30,7 @@ namespace {
     }
 }
 
-inline Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2) {
+Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2) {
     if (!horizontal_merge(rect1, rect2)) {
         exit(EXIT_FAILURE);
     }
@@ -49,7 +38,7 @@ inline Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rec
     return Rectangle{rect1.width(), rect1.height() + rect2.height(), rect1.pos()};
 }
 
-inline Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2) {
+Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2) {
     if (!vertical_merge(rect1, rect2)) {
         exit(EXIT_FAILURE);
     }
