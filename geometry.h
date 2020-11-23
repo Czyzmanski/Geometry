@@ -250,9 +250,9 @@ public:
 };
 
 
-inline Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2);
+Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2);
 
-inline Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2);
+Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2);
 
 Rectangle merge_all(const Rectangles &rects);
 
