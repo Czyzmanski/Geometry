@@ -220,7 +220,7 @@ public:
         return rectangles[i];
     }
 
-    std::size_t size() const {
+    size_t size() const {
         return rectangles.size();
     }
 
