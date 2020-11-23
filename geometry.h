@@ -54,7 +54,7 @@ public:
 
     int32_t x() const {
         return m_x;
-    };
+    }
 
     int32_t y() const {
         return m_y;
@@ -67,6 +67,7 @@ public:
     Vector &operator+=(const Vector &vec) {
         m_x += vec.m_x;
         m_y += vec.m_y;
+
         return *this;
     }
 };
@@ -74,18 +75,17 @@ public:
 
 class Position {
 private:
-    int32_t m_x;
-    int32_t m_y;
+    Vector vec;
 public:
     Position() = delete;
 
-    Position(int32_t x, int32_t y) : m_x{x}, m_y{y} {}
+    Position(int32_t x, int32_t y) : vec{x, y} {}
 
     ~Position() = default;
 
     Position(const Position &pos) = default;
 
-    explicit Position(const Vector &vec) : m_x{vec.x()}, m_y{vec.y()} {}
+    explicit Position(const Vector &vec) : vec{vec} {}
 
     Position &operator=(const Position &pos) = default;
 
@@ -94,37 +94,38 @@ public:
     Position &operator=(Position &&pos) = default;
 
     explicit operator Vector() const {
-        return Vector{m_x, m_y};
+        return vec;
     }
 
     Position operator+(const Vector &vec) const {
-        return Position{m_x + vec.x(), m_y + vec.y()};
+        return (Position) (this->vec + vec);
     }
 
     bool operator==(const Position &pos) const {
-        return m_x == pos.m_x && m_y == pos.m_y;
+        return vec == pos.vec;
     }
 
     int32_t x() const {
-        return m_x;
+        return vec.x();
     }
 
     int32_t y() const {
-        return m_y;
+        return vec.y();
     }
 
     Position reflection() const {
-        return Position{m_y, m_x};
+        return (Position) vec.reflection();
     }
 
     Position &operator+=(const Vector &vec) {
-        m_x += vec.x();
-        m_y += vec.y();
+        this->vec += vec;
+
         return *this;
     }
 
     static Position &origin() {
         static Position position{0, 0};
+
         return position;
     }
 };
@@ -138,11 +139,15 @@ private:
 public:
     Rectangle() = delete;
 
-    Rectangle(uint32_t width, uint32_t height) : m_width{width}, m_height{height},
-                                                 m_pos{Position::origin()} {}
+    Rectangle(int64_t width, int64_t height,
+              const Position &pos = Position::origin()) : m_pos{pos} {
+        if (width <= 0 || height <= 0) {
+            exit(EXIT_FAILURE);
+        }
 
-    Rectangle(uint32_t width, uint32_t height,
-              const Position &pos) : m_width{width}, m_height{height}, m_pos{pos} {}
+        m_width = (uint32_t) width;
+        m_height = (uint32_t) height;
+    }
 
     ~Rectangle() = default;
 
@@ -182,6 +187,7 @@ public:
 
     Rectangle &operator+=(const Vector &vec) {
         m_pos += vec;
+
         return *this;
     }
 
@@ -197,7 +203,8 @@ private:
 public:
     Rectangles() = default;
 
-    Rectangles(std::initializer_list<Rectangle> rectangles) : rectangles{rectangles} {}
+    Rectangles(std::initializer_list<Rectangle> rectangles) : rectangles{
+            rectangles} {}
 
     ~Rectangles() = default;
 
@@ -236,18 +243,15 @@ public:
         for (Rectangle &rect : rectangles) {
             rect += vec;
         }
+
         return *this;
     }
 };
 
 
-inline Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2) {
-    return Rectangle{rect1.width(), rect1.height() + rect2.height(), rect1.pos()};
-}
+inline Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2);
 
-inline Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2) {
-    return Rectangle{rect1.width() + rect2.width(), rect1.height(), rect1.pos()};
-}
+inline Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2);
 
 Rectangle merge_all(const Rectangles &rects);
 

@@ -33,25 +33,40 @@ namespace {
     }
 }
 
+inline Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2) {
+    if (!horizontal_merge(rect1, rect2)) {
+        exit(EXIT_FAILURE);
+    }
+
+    return Rectangle{rect1.width(), rect1.height() + rect2.height(), rect1.pos()};
+}
+
+inline Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2) {
+    if (!vertical_merge(rect1, rect2)) {
+        exit(EXIT_FAILURE);
+    }
+
+    return Rectangle{rect1.width() + rect2.width(), rect1.height(), rect1.pos()};
+}
+
 Rectangle merge_all(const Rectangles &rects) {
     if (rects.size() == 0) {
         exit(EXIT_FAILURE);
     }
-    else {
-        Rectangle acc = rects[0];
 
-        for (size_t i = 1; i < rects.size(); i++) {
-            if (horizontal_merge(acc, rects[i])) {
-                acc = merge_horizontally(acc, rects[i]);
-            }
-            else if (vertical_merge(acc, rects[i])) {
-                acc = merge_vertically(acc, rects[i]);
-            }
-            else {
-                exit(EXIT_FAILURE);
-            }
+    Rectangle acc = rects[0];
+
+    for (size_t i = 1; i < rects.size(); i++) {
+        if (horizontal_merge(acc, rects[i])) {
+            acc = merge_horizontally(acc, rects[i]);
         }
-
-        return acc;
+        else if (vertical_merge(acc, rects[i])) {
+            acc = merge_vertically(acc, rects[i]);
+        }
+        else {
+            exit(EXIT_FAILURE);
+        }
     }
+
+    return acc;
 }
