@@ -22,7 +22,7 @@ private:
 public:
     Vector() = delete;
 
-    Vector(int32_t x, int32_t y) : m_x(x), m_y(y) {}
+    Vector(int32_t x, int32_t y) : m_x{x}, m_y{y} {}
 
     ~Vector() = default;
 
@@ -79,13 +79,13 @@ private:
 public:
     Position() = delete;
 
-    Position(int32_t x, int32_t y) : m_x(x), m_y(y) {}
+    Position(int32_t x, int32_t y) : m_x{x}, m_y{y} {}
 
     ~Position() = default;
 
     Position(const Position &pos) = default;
 
-    explicit Position(const Vector &vec) : m_x(vec.x()), m_y(vec.y()) {}
+    explicit Position(const Vector &vec) : m_x{vec.x()}, m_y{vec.y()} {}
 
     Position &operator=(const Position &pos) = default;
 
@@ -138,11 +138,11 @@ private:
 public:
     Rectangle() = delete;
 
-    Rectangle(uint32_t width, uint32_t height) : m_width(width), m_height(height),
-                                                 m_pos(Position::origin()) {}
+    Rectangle(uint32_t width, uint32_t height) : m_width{width}, m_height{height},
+                                                 m_pos{Position::origin()} {}
 
     Rectangle(uint32_t width, uint32_t height,
-              const Position &pos) : m_width(width), m_height(height), m_pos(pos) {}
+              const Position &pos) : m_width{width}, m_height{height}, m_pos{pos} {}
 
     ~Rectangle() = default;
 
@@ -197,7 +197,7 @@ private:
 public:
     Rectangles() = default;
 
-    Rectangles(std::initializer_list<Rectangle> rectangles) : rectangles(rectangles) {}
+    Rectangles(std::initializer_list<Rectangle> rectangles) : rectangles{rectangles} {}
 
     ~Rectangles() = default;
 
