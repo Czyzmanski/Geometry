@@ -48,6 +48,8 @@ public:
 
     Rectangles operator+(const Rectangles &rects) const;
 
+    Rectangles operator+(Rectangles &&rects) const;
+
     bool operator==(const Vector &vec) const {
         return m_x == vec.m_x && m_y == vec.m_y;
     }
@@ -203,8 +205,7 @@ private:
 public:
     Rectangles() = default;
 
-    Rectangles(std::initializer_list<Rectangle> rectangles) : rectangles{
-            rectangles} {}
+    Rectangles(std::initializer_list<Rectangle> rects) : rectangles{rects} {}
 
     ~Rectangles() = default;
 
@@ -217,17 +218,17 @@ public:
     Rectangles &operator=(Rectangles &&rects) = default;
 
     Rectangles operator+(const Vector &vec) const {
-        Rectangles rects;
-        rects.rectangles.reserve(rectangles.size());
+        Rectangles result{*this};
+        result += vec;
 
-        for (const Rectangle &rect : rectangles) {
-            rects.rectangles.push_back(rect + vec);
-        }
-
-        return rects;
+        return result;
     }
 
-    const Rectangle &operator[](std::size_t i) const {
+    Rectangle &operator[](size_t i) {
+        return rectangles[i];
+    }
+
+    const Rectangle &operator[](size_t i) const {
         return rectangles[i];
     }
 

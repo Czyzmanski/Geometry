@@ -1,4 +1,5 @@
 #include <cstdlib>
+
 #include "geometry.h"
 
 Vector::Vector(const Position &pos) : m_x{pos.x()}, m_y{pos.y()} {}
@@ -17,6 +18,13 @@ Rectangle Vector::operator+(const Rectangle &rect) const {
 
 Rectangles Vector::operator+(const Rectangles &rects) const {
     return rects + *this;
+}
+
+Rectangles Vector::operator+(Rectangles &&rects) const {
+    Rectangles result{rects};
+    result += *this;
+
+    return result;
 }
 
 namespace {
@@ -54,19 +62,19 @@ Rectangle merge_all(const Rectangles &rects) {
         exit(EXIT_FAILURE);
     }
 
-    Rectangle acc = rects[0];
+    Rectangle result = rects[0];
 
     for (size_t i = 1; i < rects.size(); i++) {
-        if (horizontal_merge(acc, rects[i])) {
-            acc = merge_horizontally(acc, rects[i]);
+        if (horizontal_merge(result, rects[i])) {
+            result = merge_horizontally(result, rects[i]);
         }
-        else if (vertical_merge(acc, rects[i])) {
-            acc = merge_vertically(acc, rects[i]);
+        else if (vertical_merge(result, rects[i])) {
+            result = merge_vertically(result, rects[i]);
         }
         else {
             exit(EXIT_FAILURE);
         }
     }
 
-    return acc;
+    return result;
 }
