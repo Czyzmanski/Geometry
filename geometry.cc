@@ -17,16 +17,18 @@ Rectangle Vector::operator+(const Rectangle &rect) const {
 }
 
 namespace {
+    /* Check if horizontal merge is possible. */
     inline bool horizontal_merge(const Rectangle &rect1, const Rectangle &rect2) {
         return rect1.width() == rect2.width()
                && rect1.pos().x() == rect2.pos().x()
-               && rect1.pos().y() + rect1.height() == rect2.pos().y();
+               && rect1.pos().y() + (int64_t) rect1.height() == rect2.pos().y();
     }
 
+    /* Check if vertical merge is possible. */
     inline bool vertical_merge(const Rectangle &rect1, const Rectangle &rect2) {
         return rect1.height() == rect2.height()
                && rect1.pos().y() == rect2.pos().y()
-               && rect1.pos().x() + rect1.width() == rect2.pos().x();
+               && rect1.pos().x() + (int64_t) rect1.width() == rect2.pos().x();
     }
 }
 
